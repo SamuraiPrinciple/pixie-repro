@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pixie-repro
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pixie-repro
+  template:
+    metadata:
+      name: pixie-repro
+      labels:
+        app: pixie-repro
+    spec:
+      containers:
+        - name: pixie-repro-1
+          image: returnthis/pixie-repro:latest
+          imagePullPolicy: Always
+        - name: pixie-repro-2
+          image: returnthis/pixie-repro:latest
+          env:
+            - name: GODEBUG
+              value: http2client=0
+          imagePullPolicy: Always
+      restartPolicy: Always
+  revisionHistoryLimit: 1
